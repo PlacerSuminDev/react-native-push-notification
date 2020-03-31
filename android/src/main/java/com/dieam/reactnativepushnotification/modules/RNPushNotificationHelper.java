@@ -143,6 +143,12 @@ public class RNPushNotificationHelper {
                 return;
             }
 
+            // In case of foreground: msg was handled by app and this fn was run
+            // In case of background: msg was handled by GooglePlayService and this fn was not reached.
+            Boolean isForeground = bundle.getBoolean("foreground");
+            if (isForeground) return;
+            // end
+            
             if (bundle.getString("message") == null) {
                 // this happens when a 'data' notification is received - we do not synthesize a local notification in this case
                 Log.d(LOG_TAG, "Cannot send to notification centre because there is no 'message' field in: " + bundle);
